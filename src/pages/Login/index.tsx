@@ -376,7 +376,7 @@ const LoginEffect: React.FC = () => {
           <div className="login-header">
             <h1 className="login-title">欢迎来到 Pegasus</h1>
             <div className="title-decoration" />
-            <p className="login-subtitle">超维动力 Kinetix AI 具身平台</p>
+            <p className="login-subtitle">AI 平台</p>
           </div>
 
           {/* 推荐登录方式 */}
