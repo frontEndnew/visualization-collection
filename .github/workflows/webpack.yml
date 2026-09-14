@@ -1,10 +1,10 @@
-name: NodeJS with Webpack
+name: Build and Lint
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ master, main, develop ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ master, main, develop ]
 
 jobs:
   build:
@@ -12,17 +12,30 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 22.x]
+        node-version: [16.x, 18.x]
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v3
 
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
+        cache: 'npm'
 
-    - name: Build
-      run: |
-        npm install
-        npx webpack
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run lint
+      run: npm run lint
+
+    - name: Build project
+      run: npm run build
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: build-output-${{ matrix.node-version }}
+        path: dist/
+        retention-days: 7
