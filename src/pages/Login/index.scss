@@ -1,0 +1,516 @@
+// 登录页面 - 极致科技感设计（Spline 3D + 光标拖尾版）
+.login-page {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; // 右对齐
+  padding-right: 8%; // 右侧边距
+  overflow: hidden;
+  position: relative;
+  background: #0a0a0a;
+  cursor: none; // 隐藏默认光标
+}
+
+// ==================== 光标效果 ====================
+.cursor-dot {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease;
+}
+
+.cursor-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9996;
+}
+
+// 确保交互元素上光标效果正常
+input,
+button,
+a {
+  cursor: none;
+}
+
+input:focus ~ .cursor-dot,
+button:hover ~ .cursor-dot {
+  transform: translate(-50%, -50%) scale(1.5);
+}
+
+// ==================== 3D 机器人动画（Spline viewer） ====================
+.spline-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 70%; // 左侧 70% 区域
+  height: 100%;
+  z-index: 1;
+  display: none; // 默认隐藏，大屏幕显示
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #0a0a0a;
+
+  @media (min-width: 1024px) {
+    display: flex; // 大屏幕显示
+  }
+
+  spline-viewer {
+    width: 100%;
+    height: 130%;
+    margin-bottom: -32px;
+  }
+}
+
+// 科技感网格背景（轻微）
+.grid-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  background-image:
+    linear-gradient(rgba(0, 242, 254, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 242, 254, 0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+  opacity: 0.3;
+  animation: gridMove 20s linear infinite;
+}
+
+@keyframes gridMove {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(50px, 50px);
+  }
+}
+
+// ==================== Logo区域 ====================
+.login-logo-container {
+  position: absolute;
+  top: 40px;
+  left: 60px;
+  display: flex;
+  align-items: center;
+  z-index: 100;
+  animation: fadeInDown 1s ease-out;
+}
+
+.login-logo {
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.4));
+  animation: loginLogoGlow 3s ease-in-out infinite;
+}
+
+@keyframes loginLogoGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.4));
+  }
+  50% {
+    filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.8));
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ==================== 登录容器 ====================
+.login-container {
+  position: relative;
+  z-index: 50;
+  animation: fadeInUp 1s ease-out 0.2s both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ==================== 登录卡片 ====================
+.login-card {
+  position: relative;
+  width: 430px;
+  background: rgba(5, 15, 30, 0.85); // 更深的背景，更好的对比度
+  backdrop-filter: blur(30px) saturate(180%); // 增强毛玻璃效果
+  border-radius: 24px;
+  padding: 56px 48px;
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(0, 242, 254, 0.15),
+    inset 0 0 60px rgba(0, 242, 254, 0.03);
+
+  // 边框光效
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 24px;
+    padding: 1px;
+    background: linear-gradient(
+      135deg,
+      rgba(0, 242, 254, 0.4) 0%,
+      rgba(79, 172, 254, 0.1) 25%,
+      rgba(0, 242, 254, 0) 50%,
+      rgba(79, 172, 254, 0.1) 75%,
+      rgba(0, 242, 254, 0.4) 100%
+    );
+    background-size: 200% 200%;
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: borderGlow 4s linear infinite;
+    pointer-events: none;
+  }
+}
+
+@keyframes borderGlow {
+  0% {
+    background-position: 0% 50%;
+    opacity: 0.6;
+  }
+  50% {
+    background-position: 100% 50%;
+    opacity: 1;
+  }
+  100% {
+    background-position: 0% 50%;
+    opacity: 0.6;
+  }
+}
+
+// ==================== 标题区域 ====================
+.login-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.login-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 12px 0;
+  letter-spacing: 2px;
+  text-shadow:
+    0 0 20px rgba(0, 242, 254, 0.5),
+    0 0 40px rgba(79, 172, 254, 0.3);
+  animation: titleGlow 2s ease-in-out infinite;
+}
+
+@keyframes titleGlow {
+  0%, 100% {
+    text-shadow:
+      0 0 20px rgba(0, 242, 254, 0.5),
+      0 0 40px rgba(79, 172, 254, 0.3);
+  }
+  50% {
+    text-shadow:
+      0 0 30px rgba(0, 242, 254, 0.8),
+      0 0 60px rgba(79, 172, 254, 0.5);
+  }
+}
+
+.title-decoration {
+  width: 60px;
+  height: 3px;
+  margin: 0 auto 16px;
+  background: linear-gradient(90deg, transparent, #00f2fe, transparent);
+  box-shadow: 0 0 10px rgba(0, 242, 254, 0.8);
+  animation: lineExpand 2s ease-in-out infinite;
+}
+
+@keyframes lineExpand {
+  0%, 100% {
+    width: 60px;
+    opacity: 0.6;
+  }
+  50% {
+    width: 120px;
+    opacity: 1;
+  }
+}
+
+.login-subtitle {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+// ==================== 分割线 ====================
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 36px 0 28px;
+  text-align: center;
+  color: rgba(0, 242, 254, 0.9);
+  font-size: 14px;
+  font-weight: 500;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      rgba(0, 242, 254, 0.5),
+      transparent
+    );
+  }
+
+  span {
+    padding: 0 20px;
+    letter-spacing: 1px;
+    background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmerText 3s ease-in-out infinite;
+  }
+}
+
+@keyframes shimmerText {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+// ==================== 社交登录按钮 ====================
+.social-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.social-button {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 242, 254, 0.2);
+  background: rgba(0, 20, 40, 0.4);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(0, 242, 254, 0.1);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.4s ease, height 0.4s ease;
+  }
+
+  svg {
+    position: relative;
+    z-index: 2;
+    width: 20px;
+    height: 20px;
+    transition: all 0.3s ease;
+  }
+
+  &:hover {
+    border-color: rgba(0, 242, 254, 0.6);
+    background: rgba(0, 30, 60, 0.6);
+    transform: translateY(-3px);
+    box-shadow:
+      0 8px 20px rgba(0, 242, 254, 0.3),
+      0 0 30px rgba(0, 242, 254, 0.2);
+
+    &::before {
+      width: 100px;
+      height: 100px;
+    }
+
+    svg {
+      transform: scale(1.1);
+      filter: drop-shadow(0 0 8px currentColor);
+    }
+  }
+
+  &.feishu {
+    img {
+      transition: all 0.3s ease;
+    }
+
+    &:hover {
+      border-color: rgba(0, 214, 185, 0.6);
+      box-shadow:
+        0 8px 20px rgba(0, 214, 185, 0.3),
+        0 0 30px rgba(0, 214, 185, 0.2);
+
+      img {
+        transform: scale(1.1);
+      }
+    }
+
+    // 主要推荐按钮样式
+    &.primary-social {
+      width: auto;
+      min-width: 160px;
+      padding: 0 24px;
+      height: 56px;
+      background: linear-gradient(135deg, rgba(0, 214, 185, 0.1) 0%, rgba(51, 112, 255, 0.1) 100%);
+      border: 2px solid rgba(0, 214, 185, 0.4);
+      box-shadow:
+        0 8px 24px rgba(0, 214, 185, 0.2),
+        0 0 40px rgba(0, 214, 185, 0.1),
+        inset 0 0 20px rgba(0, 214, 185, 0.05);
+      animation: feishuPulse 3s ease-in-out infinite;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+
+      img {
+        width: 28px;
+        height: 28px;
+      }
+
+      &:hover {
+        background: linear-gradient(135deg, rgba(0, 214, 185, 0.2) 0%, rgba(51, 112, 255, 0.2) 100%);
+        border-color: rgba(0, 214, 185, 0.8);
+        transform: translateY(-4px);
+        box-shadow:
+          0 12px 32px rgba(0, 214, 185, 0.4),
+          0 0 60px rgba(0, 214, 185, 0.3),
+          inset 0 0 30px rgba(0, 214, 185, 0.1);
+      }
+    }
+  }
+}
+
+.feishu-text {
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+@keyframes feishuPulse {
+  0%, 100% {
+    box-shadow:
+      0 8px 24px rgba(0, 214, 185, 0.2),
+      0 0 40px rgba(0, 214, 185, 0.1),
+      inset 0 0 20px rgba(0, 214, 185, 0.05);
+  }
+  50% {
+    box-shadow:
+      0 8px 24px rgba(0, 214, 185, 0.4),
+      0 0 60px rgba(0, 214, 185, 0.2),
+      inset 0 0 30px rgba(0, 214, 185, 0.1);
+  }
+}
+
+// ==================== 响应式设计 ====================
+@media (max-width: 1024px) {
+  .login-page {
+    justify-content: center; // 平板和移动端居中
+    padding-right: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .login-logo-container {
+    top: 20px;
+    left: 20px;
+
+    .login-logo {
+      height: 36px;
+    }
+  }
+
+  .login-card {
+    width: calc(100vw - 40px);
+    max-width: 420px;
+    padding: 40px 32px;
+  }
+
+  .login-title {
+    font-size: 26px;
+  }
+
+  .login-subtitle {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-logo-container {
+    top: 16px;
+    left: 16px;
+
+    .login-logo {
+      height: 28px;
+    }
+  }
+
+  .login-card {
+    width: calc(100vw - 32px);
+    padding: 32px 24px;
+  }
+
+  .login-header {
+    margin-bottom: 36px;
+  }
+
+  .login-title {
+    font-size: 22px;
+    letter-spacing: 1px;
+  }
+
+  .login-subtitle {
+    font-size: 11px;
+    letter-spacing: 2px;
+  }
+
+  .social-button {
+    width: 48px;
+    height: 48px;
+  }
+}
